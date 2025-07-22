@@ -226,14 +226,23 @@ class md5_grom:
     supports = set(["md5"])
 
     def crack(self, config):
+        browser_like_headers = {
+            "Origin": "https://md5.gromweb.com",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36",
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+            "Accept-Encoding": "gzip, deflate",
+            "Accept-Language": "en-GB,en-US;q=0.9,en;q=0.8",
+            "Connection": "open",
+        }
         try:
             out = requests.get(
                 f"https://md5.gromweb.com/?md5={config['chash']}",
                 timeout=config["timeout"],
+                headers=browser_like_headers,
             ).text
             text = "".join(
                 out.split(
-                    '<input class="field" id="form_string_to_hash_string" type="search" name="string" value="'
+                    'was successfully reversed into the string <a class="String" href="/?string='
                 )[1]
             ).split('"')[0]
             if not text:
